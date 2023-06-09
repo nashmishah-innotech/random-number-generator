@@ -92,6 +92,7 @@ function App() {
   const resetNumber = () => {
     testGeneratingNumber = !generatingNumber;
     createdNumberSet([]);
+    randomNumberSet(0);
     localStorage.setItem("randomNumber", JSON.stringify([]));
   };
   return (
