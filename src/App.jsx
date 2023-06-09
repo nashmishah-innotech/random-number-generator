@@ -21,11 +21,19 @@ function App() {
   var newInterval;
 
   const generateNumber = () => {
+    if (JSON.parse(localStorage.getItem("randomNumber")) == null) {
+      // console.log("Hello");
+      createdNumberSet([]);
+    }
     testGeneratingNumber = !generatingNumber;
     // console.log(testGeneratingNumber);
 
     // Loop to show fancy number looping
     const showLooping = () => {
+      if (JSON.parse(localStorage.getItem("randomNumber")) == null) {
+        // console.log("Hello");
+        createdNumberSet([]);
+      }
       if (createdNumber.length === numberOfParticipants) {
         randomNumberSet("No more numbers");
       } else {
@@ -55,7 +63,7 @@ function App() {
         );
       } else if (createdNumber.length === numberOfParticipants) {
         randomNumberSet("No more numbers");
-        console.log(testGeneratingNumber);
+        // console.log(testGeneratingNumber);
         testGeneratingNumber = !generatingNumber;
       } else {
         let diffNumber = false;
@@ -77,7 +85,7 @@ function App() {
     };
 
     if (testGeneratingNumber) {
-      console.log(testGeneratingNumber);
+      // console.log(testGeneratingNumber);
       showLooping();
       generatingNumberSet(!generatingNumber);
     } else if (!testGeneratingNumber) {
