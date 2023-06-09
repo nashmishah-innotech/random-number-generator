@@ -4,7 +4,9 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 
 function App() {
-  const [createdNumber, createdNumberSet] = useState([]);
+  const [createdNumber, createdNumberSet] = useState(
+    JSON.parse(localStorage.getItem("randomNumber")) || []
+  );
   const [randomNumber, randomNumberSet] = useState(0);
   const [generatingNumber, generatingNumberSet] = useState(false);
   const [intervalId, setIntervalId] = useState(0);
@@ -47,24 +49,35 @@ function App() {
       if (createdNumber.length === 0) {
         randomNumberSet(randomNumber);
         createdNumberSet([randomNumber]);
+        localStorage.setItem(
+          "randomNumber",
+          JSON.stringify([...createdNumber, randomNumber])
+        );
       } else if (createdNumber.length === numberOfParticipants) {
         randomNumberSet("No more numbers");
+        console.log(testGeneratingNumber);
+        testGeneratingNumber = !generatingNumber;
       } else {
         let diffNumber = false;
         while (diffNumber === false) {
           randomNumberSet(randomNumber);
           randomNumber = Math.ceil(Math.random() * numberOfParticipants);
           const sameNumber = createdNumber.includes(randomNumber);
-          console.log(`Existing: ${createdNumber}`);
-          console.log(`New: ${randomNumber}`);
+          // console.log(`Existing: ${createdNumber}`);
+          // console.log(`New: ${randomNumber}`);
           diffNumber = !sameNumber;
         }
         randomNumberSet(randomNumber);
         createdNumberSet([...createdNumber, randomNumber]);
+        localStorage.setItem(
+          "randomNumber",
+          JSON.stringify([...createdNumber, randomNumber])
+        );
       }
     };
 
     if (testGeneratingNumber) {
+      console.log(testGeneratingNumber);
       showLooping();
       generatingNumberSet(!generatingNumber);
     } else if (!testGeneratingNumber) {
@@ -75,10 +88,20 @@ function App() {
 
     // console.log(testGeneratingNumber);
   };
+
+  const resetNumber = () => {
+    testGeneratingNumber = !generatingNumber;
+    createdNumberSet([]);
+    localStorage.setItem("randomNumber", JSON.stringify([]));
+  };
   return (
     <>
       <h1>{randomNumber}</h1>
       <button onClick={generateNumber}>Generate Number</button>
+      <br></br>
+      <br></br>
+
+      <button onClick={resetNumber}>Reset Number</button>
     </>
   );
 }
